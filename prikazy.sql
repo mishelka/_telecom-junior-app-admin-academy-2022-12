@@ -26,6 +26,8 @@ ALTER TABLE person RENAME sex TO gender;
 ALTER TABLE person RENAME identification_number to id_number;
 ALTER TABLE person ALTER COLUMN name DROP NOT NULL;
 ALTER TABLE contact ALTER COLUMN email SET NOT NULL;
+
+
 /*
 jfkldsa
 jkfldsa
