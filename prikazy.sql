@@ -23,6 +23,9 @@ CREATE TABLE contact(
 ALTER TABLE person ADD COLUMN sex VARCHAR(10);
 ALTER TABLE person DROP COLUMN address;
 ALTER TABLE person RENAME sex TO gender;
+ALTER TABLE person RENAME identification_number to id_number;
+ALTER TABLE person ALTER COLUMN name DROP NOT NULL;
+ALTER TABLE contact ALTER COLUMN email SET NOT NULL;
 /*
 jfkldsa
 jkfldsa
