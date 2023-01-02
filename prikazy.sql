@@ -4,11 +4,20 @@ CREATE TABLE person(
   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name VARCHAR(20) NOT NULL,
   surname VARCHAR(30) NOT NULL,
-  age INT NOT NULL CHECK(age > 0),
+  age INT NOT NULL CHECK(age >= 0),
   birth_date DATE,
   address VARCHAR(50),
   identification_number UUID NOT NULL UNIQUE,
   salary DECIMAL(18,2) DEFAULT 5000.00 CHECK(salary > 0)
+);
+
+CREATE TABLE contact(
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    person_id INT,
+    email VARCHAR(20),
+    CONSTRAINT fk_person
+        FOREIGN KEY(person_id)
+        REFERENCES person(id)
 );
 
 /*
