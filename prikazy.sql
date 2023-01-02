@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS person;
+DROP TABLE IF EXISTS person, contact;
 
 CREATE TABLE person(
   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -20,6 +20,9 @@ CREATE TABLE contact(
         REFERENCES person(id)
 );
 
+ALTER TABLE person ADD COLUMN sex VARCHAR(10);
+ALTER TABLE person DROP COLUMN address;
+ALTER TABLE person RENAME sex TO gender;
 /*
 jfkldsa
 jkfldsa
