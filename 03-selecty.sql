@@ -56,7 +56,7 @@ SELECT first_name, last_name, amount FROM customer, payment
  WHERE customer.customer_id = payment.customer_id
      AND amount > 10;
 
-SELECT c.first_name || ' ' || c.last_name as customer,
+SELECT UPPER(c.first_name || ' ' || c.last_name) as customer,
        amount,
        s.first_name || ' ' || s.last_name as staff
 FROM customer c, payment p, staff s
@@ -64,4 +64,16 @@ FROM customer c, payment p, staff s
      AND s.staff_id = p.staff_id
      AND amount > 10;
 
--- select * from payment;
+--2 vypiste nazvy vsetkych kategorii podla abecedy
+--3a zmente jazyk viacerych filmov na rozne ine jazyky cez UPDATE, aby ste dostali iny vysledok.
+--3 vyberte vsetky filmy v anglickom jazyku (1000). Kolko je takych, ktore nie su v anglictine? (0)
+--4 vypiste adresy zoradene podla okresu (district) abecedne (vzostupne), pričom prázdne okresy (null) budú zobrazené ako prvé
+--5 kolko akcnych filmov sa nachadza v nasej databaze? (64)
+--6 vypiste pocet vsetkych filmov v obchode s id 1 (2270)
+--7 vypiste adresy a telefonne cisla vsetkych obchodov
+--  pridajte aj mena a emaily ich manazerov
+--  k adrese pridajte aj mesto a krajinu
+--8 ktore filmy zatial neboli vratene? Nazvy tychto filmov vypiste velkymi pismenami. (183)
+--9 Vypiste zoznam filmov, v ktorych hral James Pitt (31).
+--10 vypiste nazvy pozicanych (rentals) filmov, ktore sa uskutocnili v roku 2006 (treba pouzit funkciu EXTRACT na vybratie roku) (182)
+--   BONUS: pridajte aj adresu obchodu, z ktoreho boli pozicane a priezvisko zamestnanca, ktory filmy pozical
