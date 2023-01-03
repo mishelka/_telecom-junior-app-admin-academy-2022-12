@@ -55,3 +55,13 @@ WHERE c.customer_id = p.customer_id
 SELECT first_name, last_name, amount FROM customer, payment
  WHERE customer.customer_id = payment.customer_id
      AND amount > 10;
+
+SELECT c.first_name || ' ' || c.last_name as customer,
+       amount,
+       s.first_name || ' ' || s.last_name as staff
+FROM customer c, payment p, staff s
+ WHERE c.customer_id = p.customer_id
+     AND s.staff_id = p.staff_id
+     AND amount > 10;
+
+-- select * from payment;
