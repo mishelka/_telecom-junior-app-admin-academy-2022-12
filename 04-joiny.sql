@@ -20,3 +20,14 @@ ON f.language_id = l.language_id;
 select f.title from film f
 RIGHT JOIN language l
 ON f.language_id = l.language_id;
+
+--ULOHA na prepisanie:
+--bez inner joinu (sql ho ale automaticky robi):
+SELECT COUNT(*) FROM customer c, payment p
+WHERE c.customer_id = p.customer_id
+AND amount > 10;
+--s inner joinom:
+SELECT COUNT(*) FROM customer c
+INNER JOIN payment p
+    ON c.customer_id = p.customer_id
+WHERE amount > 10;
