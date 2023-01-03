@@ -48,6 +48,6 @@ WHERE id = 2;
 
 DELETE FROM urls WHERE id = 1;
 
-SELECT * FROM urls;
-
+-- SELECT * FROM urls;
+SELECT COUNT(*) FROM urls;
 
