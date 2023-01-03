@@ -45,3 +45,13 @@ WHERE amount BETWEEN 3.0 AND 5.0;
 -- pocet takych platieb
 SELECT COUNT(amount) FROM payment WHERE amount BETWEEN 3.0 AND 5.0;
 
+-- vyberte mena a priezviska a platby zakaznikov, ktorych platby boli vyssie ako 10 dolarov
+-- kolko ich je?
+-- SELECT * from payment;
+SELECT COUNT(*) FROM customer c, payment p
+WHERE c.customer_id = p.customer_id
+  AND amount > 10;
+
+SELECT first_name, last_name, amount FROM customer, payment
+ WHERE customer.customer_id = payment.customer_id
+     AND amount > 10;
