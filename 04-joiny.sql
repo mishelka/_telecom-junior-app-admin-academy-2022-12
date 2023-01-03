@@ -28,6 +28,11 @@ WHERE c.customer_id = p.customer_id
 AND amount > 10;
 --s inner joinom:
 SELECT COUNT(*) FROM customer c
-INNER JOIN payment p
-    ON c.customer_id = p.customer_id
+    INNER JOIN payment p
+        ON c.customer_id = p.customer_id
+WHERE amount > 10;
+--skratenie vdaka tomu, ze customer_id je v oboch tabulkach rovnako nazvane
+SELECT COUNT(*) FROM customer
+    INNER JOIN payment
+        ON customer_id
 WHERE amount > 10;
