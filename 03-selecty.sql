@@ -64,16 +64,98 @@ FROM customer c, payment p, staff s
      AND s.staff_id = p.staff_id
      AND amount > 10;
 
+/*****
+       RIESENIA ULOH
+                      ******/
 --2 vypiste nazvy vsetkych kategorii podla abecedy
+select name
+from category
+order by name asc;
+--3 vyberte vsetky filmy v anglickom jazyku (1000).
+-- Kolko je takych, ktore nie su v anglictine? (0)
+select f.title
+from film f, language l
+where f.language_id = l.language_id
+and l.name = 'English';
+select f.title
+from film f, language l
+where f.language_id = l.language_id
+and l.name != 'English';
 --3a zmente jazyk viacerych filmov na rozne ine jazyky cez UPDATE, aby ste dostali iny vysledok.
---3 vyberte vsetky filmy v anglickom jazyku (1000). Kolko je takych, ktore nie su v anglictine? (0)
+
 --4 vypiste adresy zoradene podla okresu (district) abecedne (vzostupne), pričom prázdne okresy (null) budú zobrazené ako prvé
+select a.address, a.district
+from address a
+order by district nulls first;
+
 --5 kolko akcnych filmov sa nachadza v nasej databaze? (64)
+select count(*)
+from film f, category c, film_category fc
+where f.film_id = fc.film_id
+and fc.category_id = c.category_id
+and c.name = 'Action';
+
 --6 vypiste pocet vsetkych filmov v obchode s id 1 (2270)
+select COUNT(*)
+from store s, inventory i, film f
+where f.film_id = i.film_id
+and i.store_id = s.store_id
+and s.store_id = 1;
+
 --7 vypiste adresy a telefonne cisla vsetkych obchodov
 --  pridajte aj mena a emaily ich manazerov
 --  k adrese pridajte aj mesto a krajinu
+--r.return_date IS NULL
+select a.address, a.phone,
+       sf.first_name, sf.last_name, sf.email,
+       c.city, ct.country
+from store sr, address a, staff sf, city c, country ct
+where sr.address_id = a.address_id
+and sf.staff_id = sr.manager_staff_id
+and a.city_id = c.city_id
+and c.country_id = ct.country_id;
+
 --8 ktore filmy zatial neboli vratene? Nazvy tychto filmov vypiste velkymi pismenami. (183)
---9 Vypiste zoznam filmov, v ktorych hral James Pitt (31).
+select UPPER(f.title)
+from film f, rental r, inventory i
+where r.inventory_id = i.inventory_id
+and i.film_id = f.film_id
+and r.return_date IS NULL;
+
+--9 Vypiste zoznam filmov, v ktobrych hral James Pitt (31).
+select f.title
+from film f, actor a, film_actor fa
+where f.film_id = fa.film_id
+and a.actor_id = fa.actor_id
+and a.first_name = 'James'
+and a.last_name = 'Pitt';
+
 --10 vypiste nazvy pozicanych (rentals) filmov, ktore sa uskutocnili v roku 2006 (treba pouzit funkciu EXTRACT na vybratie roku) (182)
+select f.title
+from film f, rental r, inventory i
+where r.inventory_id = i.inventory_id
+and i.film_id = f.film_id
+and EXTRACT(YEAR FROM r.rental_date) = 2006;
+
 --   BONUS: pridajte aj adresu obchodu, z ktoreho boli pozicane a priezvisko zamestnanca, ktory filmy pozical
+select f.title as movie,
+       st.first_name as staff_name,
+       st.last_name as staff_surname,
+       a.address as store_address
+from film f, rental r, inventory i, store s, staff st, address a
+where r.inventory_id = i.inventory_id
+and i.film_id = f.film_id
+and i.store_id = s.store_id
+and r.staff_id = st.staff_id
+and st.address_id = a.address_id
+and EXTRACT(YEAR FROM r.rental_date) = 2006;
+
+--11 ktorych zakaznikov mame zo strednej Europy? ('Austria', 'Czech Republic', 'Hungary', 'Poland', 'Slovakia')
+select c.first_name, c.last_name, co.country
+from customer c, address a, city ci, country co
+where c.address_id = a.address_id
+and a.city_id = ci.city_id
+and ci.country_id = co.country_id
+and co.country IN ('Austria', 'Czech Republic', 'Hungary', 'Poland', 'Slovakia');
+
+select count(*) from customer where first_name like 'T%';
