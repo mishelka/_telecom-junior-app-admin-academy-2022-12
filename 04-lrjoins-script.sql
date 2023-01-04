@@ -29,29 +29,58 @@
 -- UPDATE staff SET hiredate = NOW() WHERE hiredate IS NULL;
 -- UPDATE staff SET title = 'Shop Worker' WHERE staff_id = 1 OR staff_id = 2;
 
-CREATE TABLE IF NOT EXISTS film_review(
-   review_id SERIAL PRIMARY KEY,
-   film_id INT,
-   review VARCHAR(255) NOT NULL
-);
-
-INSERT INTO film_review(film_id, review)
-VALUES(1, 'Excellent'),
-      (1, 'Awesome'),
-      (2, 'Cool'),
-      (NULL, 'Beautiful');
+-- CREATE TABLE IF NOT EXISTS film_review(
+--    review_id SERIAL PRIMARY KEY,
+--    film_id INT,
+--    review VARCHAR(255) NOT NULL
+-- );
+--
+-- INSERT INTO film_review(film_id, review)
+-- VALUES(1, 'Excellent'),
+--       (1, 'Awesome'),
+--       (2, 'Cool'),
+--       (NULL, 'Beautiful');
 
 --inner join - iba tie, ktore maju na seba recenzie (3ks)
 -- PRIENIK mnozin
-select f.title
-    as film, r.review, f.film_id, r.review_id
-from film_review r
-inner join film f on r.film_id = f.film_id;
+-- select f.title
+--     as film, r.review, f.film_id, r.review_id
+-- from film_review r
+-- inner join film f on r.film_id = f.film_id;
 
 --full outer join - vsetko - recenzie ktore nemaju film (4+1000-2 = 1002)
 -- aj filmy, ktore nemaju recenzie
 -- ZJEDNOTENIE mnozin
-select f.title
-    as film, r.review, f.film_id, r.review_id
-from film_review r
-full outer join film f on r.film_id = f.film_id;
+-- select f.title
+--     as film, r.review, f.film_id, r.review_id
+-- from film_review r
+-- full outer join film f on r.film_id = f.film_id;
+
+DROP TABLE IF EXISTS department;
+
+CREATE TABLE department(
+	department_id SERIAL PRIMARY KEY,
+	name VARCHAR (255) NOT NULL
+);
+
+INSERT INTO department (name)
+VALUES
+	('Sales'),
+	('Marketing'),
+	('HR'),
+	('IT'),
+	('Production');
+
+ALTER TABLE staff DROP COLUMN IF EXISTS department_id;
+ALTER TABLE staff ADD COLUMN department_id INT;
+ALTER TABLE staff ADD CONSTRAINT fk_department_id FOREIGN KEY (department_id) REFERENCES department (department_id);
+
+UPDATE staff SET department_id = 1 WHERE first_name LIKE 'Mike';
+UPDATE staff SET department_id = 2 WHERE first_name LIKE 'Jon';
+UPDATE staff SET department_id = 3 WHERE first_name LIKE 'Nancy';
+UPDATE staff SET department_id = 5 WHERE first_name LIKE 'Jane';
+UPDATE staff SET department_id = 5 WHERE first_name LIKE 'Margaret';
+UPDATE staff SET department_id = 5 WHERE first_name LIKE 'Steve';
+UPDATE staff SET department_id = 4 WHERE first_name LIKE 'Michael';
+UPDATE staff SET department_id = 4 WHERE first_name LIKE 'Robert';
+UPDATE staff SET department_id = 4 WHERE first_name LIKE 'Laura';
