@@ -121,3 +121,50 @@ select c.first_name, c.last_name, f.title, p.payment_id, r.rental_id from rental
     inner join film f on i.film_id = f.film_id
     left join payment p on p.rental_id = r.rental_id
 where p.payment_id IS NOT NULL;
+
+--5 Su nejake platby, ktore sa neviazu k ziadnej vypozicke (rental)?
+select p.payment_id, r.rental_id
+from payment p
+left join rental r on p.rental_id = r.rental_id
+where p.rental_id IS NULL;
+
+--6 Ktory zamestnanec nema ziadneho sefa? Vypiste nazov jeho pozicie. Mal by to byt General Manager.
+select s.title from staff s
+where reports_to IS NULL;
+-- 6a Vypiste mena sefov vsetkych zamestnancov.
+select s.first_name,s.last_name,
+       s.title    as employee,
+       boss.title as boss from staff s
+   left join staff boss on s.reports_to = boss.staff_id;
+-- where s.reports_to IS NOT NULL;
+
+-- 8 ktory film nebol nikdy pozicany?
+-- Vypiste jeho nazov, rok vydania
+select f.title, f.release_year, i.inventory_id, r.rental_id
+from film f
+inner join inventory i on f.film_id = i.film_id
+full outer join rental r on i.inventory_id = r.inventory_id
+where r.rental_id is null;
+
+-- 8a vypiste aj herca/hercov, ktori v nom hraju
+select f.film_id, i.inventory_id, r.rental_id,
+       a.first_name || ' ' || a.last_name as actors
+from film f
+    inner join inventory i on f.film_id = i.film_id
+    inner join film_actor fa on f.film_id = fa.film_id
+    inner join actor a on fa.actor_id = a.actor_id
+full outer join rental r on i.inventory_id = r.inventory_id
+where rental_id is null;
+
+--8b pridajte aj adresu, v ktorom film maju (odkaz na store najdete v tabulke inventory)
+select f.film_id, i.inventory_id, r.rental_id,
+       a.first_name || ' ' || a.last_name as actors,
+       ad.address as store_address
+from film f
+    inner join inventory i on f.film_id = i.film_id
+    inner join film_actor fa on f.film_id = fa.film_id
+    inner join actor a on fa.actor_id = a.actor_id
+    inner join store s on i.store_id = s.store_id
+    inner join address ad on s.address_id = ad.address_id
+full outer join rental r on i.inventory_id = r.inventory_id
+where rental_id is null;
