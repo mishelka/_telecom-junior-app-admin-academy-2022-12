@@ -102,18 +102,32 @@ where f.film_id = i.film_id
 and i.store_id = s.store_id
 and s.store_id = 1;
 
+--7 cez joiny:
+select a.address, a.phone, c.city, ct.country
+from store s
+     inner join staff st on st.staff_id = s.manager_staff_id
+     inner join address a on s.address_id = a.address_id
+     inner join city c on c.city_id = a.city_id
+     inner join country ct on c.country_id = ct.country_id;
+
 --7 vypiste adresy a telefonne cisla vsetkych obchodov
 --  pridajte aj mena a emaily ich manazerov
 --  k adrese pridajte aj mesto a krajinu
 --r.return_date IS NULL
+select COUNT(*)
+from store s, inventory i, film f
+where f.film_id = i.film_id
+and i.store_id = s.store_id
+and s.store_id = 1;
+
 select a.address, a.phone,
        sf.first_name, sf.last_name, sf.email,
        c.city, ct.country
 from store sr, address a, staff sf, city c, country ct
-where sr.address_id = a.address_id
-and sf.staff_id = sr.manager_staff_id
-and a.city_id = c.city_id
-and c.country_id = ct.country_id;
+    where sr.address_id = a.address_id
+    and sf.staff_id = sr.manager_staff_id
+    and a.city_id = c.city_id
+    and c.country_id = ct.country_id;
 
 --8 ktore filmy zatial neboli vratene? Nazvy tychto filmov vypiste velkymi pismenami. (183)
 select UPPER(f.title)

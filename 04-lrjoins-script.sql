@@ -29,95 +29,42 @@
 -- UPDATE staff SET hiredate = NOW() WHERE hiredate IS NULL;
 -- UPDATE staff SET title = 'Shop Worker' WHERE staff_id = 1 OR staff_id = 2;
 
--- CREATE TABLE film_review(
---    review_id SERIAL PRIMARY KEY,
---    film_id INT,
---    review VARCHAR(255) NOT NULL
--- );
---
--- INSERT INTO film_review(film_id, review)
--- VALUES(1, 'Excellent'),
---       (1, 'Awesome'),
---       (2, 'Cool'),
---       (NULL, 'Beautiful');
+CREATE TABLE IF NOT EXISTS film_review(
+   review_id SERIAL PRIMARY KEY,
+   film_id INT,
+   review VARCHAR(255) NOT NULL
+);
 
---full outer join (can contain nulls on both sides)
---all addresses and all staff, whether they have reference between them or not
-select
-    address.address_id,
-    staff.staff_id,
-    staff.first_name, staff.last_name
-from address --left table
-full outer join staff --right table
-    on address.address_id = staff.address_id
-order by address_id nulls first;
+INSERT INTO film_review(film_id, review)
+VALUES(1, 'Excellent'),
+      (1, 'Awesome'),
+      (2, 'Cool'),
+      (NULL, 'Beautiful');
 
---left join
---all adresses with or without a reference in staff
-select
-    address.address_id,
-    staff.staff_id,
-    staff.first_name, staff.last_name
-from address --left table
-left join staff --right table
-    on address.address_id = staff.address_id
-order by staff_id nulls last;
+--inner join - iba tie, ktore maju na seba recenzie (3ks)
+-- PRIENIK mnozin
+select f.title
+    as film, r.review, f.film_id, r.review_id
+from film_review r
+inner join film f on r.film_id = f.film_id;
 
---right join
---all staff, whether they have an address or not
-select
-    address.address_id,
-    staff.staff_id,
-    staff.first_name, staff.last_name
-from address --left table
-right join staff --right table
-    on address.address_id = staff.address_id
-order by address_id nulls first;
+--full outer join - vsetko - recenzie ktore nemaju film (4+1000)
+-- aj filmy, ktore nemaju recenzie
+-- ZJEDNOTENIE mnozin
+select f.title
+    as film, r.review, f.film_id, r.review_id
+from film_review r
+full outer join film f on r.film_id = f.film_id;
 
---full outer join
---all films and inventory, whether they have reference between them or not
-select f.film_id, title, inventory_id
-    from film f
-    full outer join inventory i
-    on i.film_id = f.film_id
-    order by inventory_id nulls first;
+--1 vyber recenziu, ktora nema film (1)
+-- ROZDIEL mnozin
+select f.title as film_title,
+       r.review, f.film_id, r.review_id
+from film f
+right join film_review r on r.film_id = f.film_id
+where r.film_id IS NULL;
 
---left join
---films that are not in any inventory
-SELECT
-    inventory_id,
-	f.film_id,
-	title
-FROM
-	film f --left table - can contain null values
-LEFT JOIN inventory i --right table
-   ON i.film_id = f.film_id
-WHERE i.film_id IS NULL
-ORDER BY title;
+--2 vyber filmy, ktore nemaju recenziu (1000-2 = 998)
 
---right join
---all reviews and titles, but list also reviews that do not reference any movie
-SELECT review, title
-FROM film --left table
-RIGHT JOIN film_review --right table - will contain null values
-   ON film_review.film_id = film.film_id;
 
---right join
---find a review that does not have any movie assigned
-SELECT review, title
-FROM film
-RIGHT JOIN film_review using (film_id)
-WHERE title IS NULL;
 
---ktori zamestnanci nepozicali ani jeden film? (8)
-SELECT rental.rental_id, staff.staff_id, staff.first_name, staff.last_name
-FROM rental
-right join staff ON rental.staff_id = staff.staff_id
-where rental_id is null;
-
---ktore pozicky este nemali ziadnu platbu? (1452)
---kolko ich bolo zaplatenych celkovo? (14596)
-select payment.payment_id, rental.rental_id from payment
-full outer join rental
-on payment.rental_id = rental.rental_id
-where payment.payment_id is /*not*/ null;
