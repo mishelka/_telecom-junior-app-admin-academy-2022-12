@@ -1,7 +1,17 @@
 --INNER JOIN
-select f.title
-from film f, language l
-where f.language_id = l.language_id;
+select f.film_id, l.language_id
+from film f
+inner join language l on f.language_id = l.language_id;
+
+select f.film_id, l.language_id
+from film f
+left join language l on f.language_id = l.language_id
+order by l.language_id nulls first;
+
+select f.film_id, l.language_id, l.name
+from film f
+right join language l on f.language_id = l.language_id
+order by f.film_id nulls first;
 
 select f.title from film f
 INNER JOIN language l
@@ -63,8 +73,33 @@ FROM rental
 right join staff ON rental.staff_id = staff.staff_id
 where rental_id is null;
 --3b vypiste aj ich adresy
-SELECT staff.first_name, staff.last_name, staff.email, address.address_id
+SELECT staff.first_name, staff.last_name,
+       staff.email, address.address_id
 FROM rental
 right join staff ON rental.staff_id = staff.staff_id
+    --right join = aj taka PRAVA STRANA, ktora NEMA REFERENCIU na lavu/v lavej
+    --aj staff nema referenciu v rental
+    -- = staff, ktory nikdy neurobil ziadny rental
 left join address on staff.address_id = address.address_id
+    --left join = aj taka LAVA STRANA, ktora NEMA REFERENCIU na pravu/v pravej
+    --aj rental+staff nema referenciu na address
+    -- = cize rental+staff bez adresy
 where rental_id is null;
+--opacne, zacneme od zamestnanca
+SELECT distinct staff.first_name, staff.last_name,
+                staff.email, address.address
+FROM staff
+left join address on staff.address_id = address.address_id
+left join rental ON rental.staff_id = staff.staff_id;
+
+--4 Ktore vypozicky (rentals) este nemali ziadnu platbu? (1452)
+select p.payment_id, r.rental_id from rental r
+left join payment p on p.rental_id = r.rental_id
+where p.payment_id IS NULL;
+--4a Ku kazdej pozicke vypiste meno a priezvisko zakaznika a nazov pozicaneho filmu
+select c.first_name, c.last_name, f.title, p.payment_id, r.rental_id from rental r
+    inner join customer c on r.customer_id = c.customer_id
+    inner join inventory i on r.inventory_id = i.inventory_id
+    inner join film f on i.film_id = f.film_id
+    left join payment p on p.rental_id = r.rental_id
+where p.payment_id IS NULL;
