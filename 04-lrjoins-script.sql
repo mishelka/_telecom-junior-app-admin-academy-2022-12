@@ -48,7 +48,7 @@ select f.title
 from film_review r
 inner join film f on r.film_id = f.film_id;
 
---full outer join - vsetko - recenzie ktore nemaju film (4+1000)
+--full outer join - vsetko - recenzie ktore nemaju film (4+1000-2 = 1002)
 -- aj filmy, ktore nemaju recenzie
 -- ZJEDNOTENIE mnozin
 select f.title
@@ -65,6 +65,10 @@ right join film_review r on r.film_id = f.film_id
 where r.film_id IS NULL;
 
 --2 vyber filmy, ktore nemaju recenziu (1000-2 = 998)
+select f.title as film_title,
+       r.review, f.film_id, r.review_id
+from film f
+left join film_review r on r.film_id = f.film_id
+where r.review_id IS NULL;
 
-
-
+--3 ktori zamestnanci nepozicali ani jeden film? (8)
