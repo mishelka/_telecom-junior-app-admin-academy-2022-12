@@ -46,3 +46,52 @@ join category c on fc.category_id = c.category_id
 --where c.name LIKE 'Sci-Fi'
 group by c.name
 having AVG(f.length) > 110;
+
+
+select min(length) as min_min,
+      max(length) as max_min,
+      round(avg(length), 2) as avg_min_sec
+from film f
+inner join film_category fc on f.film_id = fc.film_id
+inner join category c on fc.category_id = c.category_id
+where c.name LIKE 'Sci-Fi';
+
+-- 3. Vypiste sumarne zisky pozicovne filmov po jednotlivych dnoch v mesiaci februar. Platby mame iba za tento mesiac.
+
+
+--4 Vypíšte zisky z vypoziciek podľa krajiny, z ktorych pochazdaju zakaznici.
+-- Zoznam zoraďte podľa zisku od najvyšších po najnižšie.
+select cr.country, SUM(p.amount) as sum
+from rental r
+  inner join payment p using(rental_id)
+  inner join customer c on p.customer_id = r.customer_id
+  inner join address a using(address_id)
+  inner join city ct using (city_id)
+  inner join country cr using (country_id)
+group by cr.country
+order by sum desc;
+
+-- Kolko za poziciavanie filmov uz minul Karl Seal?
+-- Pre overenie správnosti vedzte, že Karl Seal minul poziciavanim filmov $208.58.
+
+select customer.first_name, customer.last_name,
+       sum(amount) as vydaje
+from payment
+natural join customer
+group by customer_id
+order by vydaje desc;
+
+--Aký herec je najobľúbenejší film u zákazníka Karla Seala?
+-- (najobľúbenejší - poziciaval ho najčastejšie).
+-- Pre overenie vedzte, že jeho najoblubenejsou hereckou je Uma Wood a filmy s touto hereckou si pozical 6x.
+select a.first_name, a.last_name, count(a.actor_id)
+from rental r
+join customer c on r.customer_id = c.customer_id
+join inventory i on r.inventory_id = i.inventory_id
+join film f on f.film_id = i.film_id
+join film_actor fa on f.film_id = fa.film_id
+join actor a on fa.actor_id = a.actor_id
+where c.first_name = 'Karl'
+and c.last_name = 'Seal'
+group by a.actor_id
+order by count(a.actor_id) desc;
