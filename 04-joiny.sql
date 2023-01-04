@@ -93,13 +93,31 @@ left join address on staff.address_id = address.address_id
 left join rental ON rental.staff_id = staff.staff_id;
 
 --4 Ktore vypozicky (rentals) este nemali ziadnu platbu? (1452)
+select r.rental_id, p.payment_id
+from rental r
+--tu mozeme pouzit aj full outer join,lebo kazdy payment ma referenciu na rental
+left join payment p on r.rental_id = p.rental_id
+where p.payment_id IS NULL
+order by p.payment_id nulls first;
+
 select p.payment_id, r.rental_id from rental r
 left join payment p on p.rental_id = r.rental_id
 where p.payment_id IS NULL;
 --4a Ku kazdej pozicke vypiste meno a priezvisko zakaznika a nazov pozicaneho filmu
+select c.first_name, c.last_name, f.title
+from rental r
+left join payment p on r.rental_id = p.rental_id
+inner join customer c on r.customer_id = c.customer_id
+inner join inventory i on r.inventory_id = i.inventory_id
+inner join film f on i.film_id = f.film_id
+where p.payment_id IS NULL
+order by p.payment_id nulls first;
+-- join payment p using(rental_id);
+
+--4b Kolko ich bolo zaplatenych celkovo? (14596)
 select c.first_name, c.last_name, f.title, p.payment_id, r.rental_id from rental r
     inner join customer c on r.customer_id = c.customer_id
     inner join inventory i on r.inventory_id = i.inventory_id
     inner join film f on i.film_id = f.film_id
     left join payment p on p.rental_id = r.rental_id
-where p.payment_id IS NULL;
+where p.payment_id IS NOT NULL;
