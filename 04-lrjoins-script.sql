@@ -77,7 +77,7 @@ ALTER TABLE staff ADD CONSTRAINT fk_department_id FOREIGN KEY (department_id) RE
 
 UPDATE staff SET department_id = 1 WHERE first_name LIKE 'Mike';
 UPDATE staff SET department_id = 2 WHERE first_name LIKE 'Jon';
-UPDATE staff SET department_id = 3 WHERE first_name LIKE 'Nancy';
+UPDATE staff SET department_id = 2 WHERE first_name LIKE 'Nancy';
 UPDATE staff SET department_id = 5 WHERE first_name LIKE 'Jane';
 UPDATE staff SET department_id = 5 WHERE first_name LIKE 'Margaret';
 UPDATE staff SET department_id = 5 WHERE first_name LIKE 'Steve';
