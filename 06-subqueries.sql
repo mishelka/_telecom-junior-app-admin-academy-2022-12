@@ -54,16 +54,7 @@ where f.rental_rate < (
     SELECT AVG(rental_rate)
     FROM film
 );
-
---1 vyberte filmy, ktore boli pozicane viac ako 5x
-select title from film f
-where (
-    select count(i.film_id) from inventory i
-    left join rental r on i.inventory_id = r.inventory_id
-    where f.film_id = i.film_id
-    group by i.film_id
-) > 30;
-
+--1 Vyberte zakaznikov, ktori si pozicali viac ako 40x
 select r.customer_id, count(r.customer_id)
 from rental r
 group by r.customer_id
@@ -76,3 +67,10 @@ where (
     from rental r
     where r.customer_id = c.customer_id
 ) > 40;
+
+--2 Zoznam filmov, ktore neboli pozicane ani raz
+select count(title) from film
+where film_id not in (
+    select film_id from rental r
+    join inventory i on r.inventory_id = i.inventory_id
+);
