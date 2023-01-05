@@ -4,7 +4,7 @@ from film f;
 select AVG(f.rental_rate)
 from film f;
 
-select SUM(f.length) * 60 as time_in_minutes
+select SUM(f.length) * 60 as time_in_seconds
 from film f;
 
 --max cena filmov z kategorie Animation
@@ -59,8 +59,17 @@ where c.name LIKE 'Sci-Fi';
 -- 3. Vypiste sumarne zisky pozicovne filmov po jednotlivych dnoch v mesiaci februar. Platby mame iba za tento mesiac.
 
 
---4 Vypíšte zisky z vypoziciek podľa krajiny, z ktorych pochazdaju zakaznici.
+--4 Vypíšte zisky z vypoziciek podľa krajiny,
+-- z ktorych pochazdaju zakaznici.
 -- Zoznam zoraďte podľa zisku od najvyšších po najnižšie.
+select fa.country, SUM(amount) as zisk
+from payment p
+    inner join rental r on r.rental_id = p.rental_id
+    join customer c on c.customer_id = r.customer_id
+    inner join full_address fa on c.address_id = fa.address_id
+where DATE(p.payment_date) = '2007-02-16'
+group by fa.country;
+
 select cr.country, SUM(p.amount) as sum
 from rental r
   inner join payment p using(rental_id)
@@ -73,6 +82,18 @@ order by sum desc;
 
 -- Kolko za poziciavanie filmov uz minul Karl Seal?
 -- Pre overenie správnosti vedzte, že Karl Seal minul poziciavanim filmov $208.58.
+select SUM(amount)
+from payment p
+join customer c using(customer_id)
+where c.first_name LIKE 'Karl'
+  AND c.last_name LIKE 'Seal';
+
+select c.first_name, c.last_name, SUM(amount) as vydaje
+from payment p
+join customer c using(customer_id)
+where c.first_name LIKE 'D%'
+group by c.customer_id
+having SUM(amount) > 100;
 
 select customer.first_name, customer.last_name,
        sum(amount) as vydaje

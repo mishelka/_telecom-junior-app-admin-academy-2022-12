@@ -129,14 +129,29 @@ left join rental r on p.rental_id = r.rental_id
 where p.rental_id IS NULL;
 
 --6 Ktory zamestnanec nema ziadneho sefa? Vypiste nazov jeho pozicie. Mal by to byt General Manager.
-select s.title from staff s
-where reports_to IS NULL;
+select boss.staff_id       as boss_id,
+       employee.staff_id   as staff_id,
+       employee.first_name as staff_name,
+       employee.last_name  as staff_surname,
+       employee.title      as staff_title
+from staff employee
+left join staff boss
+    on employee.reports_to = boss.staff_id
+where boss.staff_id IS NULL;
+
 -- 6a Vypiste mena sefov vsetkych zamestnancov.
-select s.first_name,s.last_name,
-       s.title    as employee,
-       boss.title as boss from staff s
-   left join staff boss on s.reports_to = boss.staff_id;
+select DISTINCT boss.staff_id as boss_id,
+       boss.first_name as boss_name,
+       boss.last_name as boss_surname,
+       boss.title as staff_title
+from staff employee
+left join staff boss
+    on employee.reports_to = boss.staff_id
+where boss.staff_id IS NOT NULL;
 -- where s.reports_to IS NOT NULL;
+
+-- 7 ktori zamestnanci nepracuju v ziadnom oddeleni?
+
 
 -- 8 ktory film nebol nikdy pozicany?
 -- Vypiste jeho nazov, rok vydania
@@ -168,3 +183,24 @@ from film f
     inner join address ad on s.address_id = ad.address_id
 full outer join rental r on i.inventory_id = r.inventory_id
 where rental_id is null;
+
+
+--9 view pre full address
+create or replace view full_address as (
+    select a.address_id, address, address2, district, postal_code, phone,
+           a.last_update, city, country
+    from address a
+    join city c using(city_id)
+    join country ct using(country_id)
+);
+-- vypiseme vsetky adresy zakaznikov
+select c.first_name, c.last_name, fa.address,
+       fa.district, fa.city, fa.country
+from customer c
+join full_address fa on c.address_id = fa.address_id;
+
+select * from full_address
+where district LIKE 'Kosice';
+
+--drop view full_address;
+--trigger
