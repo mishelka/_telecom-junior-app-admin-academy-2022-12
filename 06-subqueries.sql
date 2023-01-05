@@ -89,6 +89,50 @@ where i.film_id is null;
 -- ktorych vek je mensi ako priemerny
 --vek vsetkych zamestnancov (5)
 --a cez extract - ale ak je tam nejaky prechodny datum, nemusi sediet
+select staff_id from staff
+    group by birthdate, staff_id
+    having extract(year from current_date)
+               - extract(year from birthdate) < (
+        select avg(extract(year from current_date)
+                       - extract(year from birthdate))
+        from staff
+);
+
+select last_name,
+      first_name,
+      extract(year from current_date) - extract(year from birthdate) as age
+from staff
+where staff_id in (
+    select staff_id from staff
+    group by birthdate, staff_id
+    having extract(year from current_date) - extract(year from birthdate) < (
+        select avg(extract(year from current_date) - extract(year from birthdate))
+        from staff
+    )
+);
+
+--b cez date_part
+select last_name,
+      first_name,
+      DATE_PART('year', AGE(now(), birthdate))
+from staff
+where staff_id in (
+    select staff_id from staff
+    group by birthdate, staff_id
+    having DATE_PART('year', AGE(now(), birthdate)) < (
+        select avg(DATE_PART('year', AGE(now(), birthdate)))
+        from staff
+    )
+);
+
+select title, c.name,
+      f.length as duration
+from category c
+    inner join film_category fc
+        on c.category_id = fc.category_id
+               and c.name = 'Action'
+    inner join film f on f.film_id = fc.film_id
+order by duration desc;
 
 --4 najdlhsi a najkratsi film v kategorii Children.
 select title,
