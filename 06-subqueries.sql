@@ -54,7 +54,8 @@ where f.rental_rate < (
     SELECT AVG(rental_rate)
     FROM film
 );
---1 Vyberte zakaznikov, ktori si pozicali viac ako 40x
+--1 Vyberte zakaznikov,
+-- ktori si pozicali viac ako 40x
 select r.customer_id, count(r.customer_id)
 from rental r
 group by r.customer_id
@@ -68,9 +69,44 @@ where (
     where r.customer_id = c.customer_id
 ) > 40;
 
---2 Zoznam filmov, ktore neboli pozicane ani raz
+--2 Zoznam filmov,
+-- ktore neboli pozicane ani raz
 select count(title) from film
 where film_id not in (
     select film_id from rental r
     join inventory i on r.inventory_id = i.inventory_id
+);
+
+--to iste cez right join
+select /*distinct i.film_id, title*/
+    count(distinct title) from rental r
+    inner join inventory i on r.inventory_id = i.inventory_id
+    right join film f on i.film_id = f.film_id
+where i.film_id is null;
+--order by i.film_id nulls first;
+
+--3 vyberte vsetkych zamestnancov,
+-- ktorych vek je mensi ako priemerny
+--vek vsetkych zamestnancov (5)
+--a cez extract - ale ak je tam nejaky prechodny datum, nemusi sediet
+
+--4 najdlhsi a najkratsi film v kategorii Children.
+select title,
+      f.length as duration
+from category c
+    inner join film_category fc
+        on c.category_id = fc.category_id
+               and c.name = 'Action'
+    inner join film f on f.film_id = fc.film_id
+where f.length = (
+    select max(length) from film f
+        inner join film_category fc on f.film_id = fc.film_id
+        inner join category c on fc.category_id = c.category_id
+            and c.name = 'Action'
+)
+or f.length = (
+    select min(length) from film f
+        inner join film_category ct on f.film_id = ct.film_id
+        inner join category c on ct.category_id = c.category_id
+            and c.name = 'Action'
 );
