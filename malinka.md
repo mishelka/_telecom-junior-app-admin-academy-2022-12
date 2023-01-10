@@ -1,11 +1,11 @@
 # Toto je Malinka
 
-Malinka jeeeee:
+Malinkaaaaa jeeeee:
 
+* jklsfdjakl
 * fajna
 * ceeeeeeeervenaaaaaa
 * pre deticky
-* ale aj pre dospelych
 * MNAM!
 
-A to je vsetko
+A to je vsetkoioooo
