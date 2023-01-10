@@ -2,10 +2,10 @@
 
 Malinkaaaaa jeeeee:
 
-* jklsfdjakl
-* fajna
-* ceeeeeeeervenaaaaaa
+* fajnnnnna
+* ceeeervenaaaaaa
 * pre deticky
-* MNAM!
+* ale aj pre dospelych
+* MNAAAAAAM!
 
 A to je vsetkoioooo
