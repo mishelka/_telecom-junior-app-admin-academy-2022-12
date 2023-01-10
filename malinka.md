@@ -1,6 +1,6 @@
 # Toto je Malinka
 
-Malinnnnnnka je:
+Malinka jeeeee:
 
 * fajna
 * ceeeeeeeervenaaaaaa
