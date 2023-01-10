@@ -3,7 +3,7 @@
 Malinka je:
 
 * fajna
-* cervena
+* ceeeeeeeerven
 * pre deticky
 * ale aj pre dospelych
 * MNAM!
