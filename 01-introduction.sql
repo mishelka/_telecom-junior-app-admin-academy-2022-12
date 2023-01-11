@@ -1,3 +1,4 @@
+--nejaky koment na zaciatku suboru
 DROP TABLE IF EXISTS person, contact;
 
 
@@ -12,6 +13,8 @@ CREATE TABLE person(
   identification_number UUID NOT NULL UNIQUE,
   salary DECIMAL(18,2) DEFAULT 5000.00 CHECK(salary > 0)
 );
+
+--nejaky dalsi koment
 
 CREATE TABLE contact(
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
